@@ -2,6 +2,7 @@
   "name": "lg-test",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -13,6 +14,14 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "basic-package": "ares-package build -o bundle -e asset-manifest.json -e precache-manifest.*.js -e service-worker.js",
+    "dev-bundle": "yarn build && yarn basic-package --no-minify",
+    "bundle": "yarn build && yarn basic-package -e *.map",
+    "dev-install": "ares-install bundle/me.cdatehortuab.lg-app_0.0.1_all.ipk",
+    "enable-chrome-debug": "ares-novacom -f -p 9998:9222",
+    "launch": "ares-launch me.cdatehortuab.lg-app",
+    "bundle-refresh": "yarn dev-package && yarn dev-install && yarn launch",
+    "bundle-start": "yarn bundle-refresh && yarn enable-chrome-debug",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
