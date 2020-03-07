@@ -11,14 +11,13 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "basic-package": "ares-package build -o bundle -e asset-manifest.json -e precache-manifest.*.js -e service-worker.js",
-    "dev-bundle": "yarn build && yarn basic-package --no-minify",
-    "bundle": "yarn build && yarn basic-package -e *.map",
-    "dev-install": "ares-install bundle/me.cdatehortuab.lg-app_0.0.1_all.ipk",
-    "enable-chrome-debug": "ares-novacom -f -p 9998:9222",
-    "launch": "ares-launch me.cdatehortuab.lg-app",
-    "bundle-refresh": "yarn dev-bundle && yarn dev-install && yarn launch",
-    "bundle-start": "yarn bundle-refresh && yarn enable-chrome-debug"
+    "package": "ares-package build -o bundle -e precache-manifest.*.js -e service-worker.js -e *.map",
+    "bundle": "yarn build && yarn package",
+    "devtools": "yarn react-devtools",
+    "dev-package": "ares-package hosted -o bundle",
+    "dev-install": "ares-install bundle/me.cdatehortuab.lg-app_0.0.0_all.ipk",
+    "chrome-debug": "ares-novacom -f -p 9998:9222",
+    "launch": "ares-launch me.cdatehortuab.lg-app"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -134,6 +133,7 @@
     "postcss-safe-parser": "4.0.1",
     "react-dev-utils": "^10.1.0",
     "react-devtools": "^4.5.0",
+    "react-devtools-core": "^4.5.0",
     "resolve": "1.15.0",
     "resolve-url-loader": "3.1.1",
     "sass-loader": "8.0.2",

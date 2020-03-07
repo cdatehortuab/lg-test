@@ -15,7 +15,8 @@ process.on('unhandledRejection', err => {
 require('../config/env');
 
 
-const fs = require('fs');
+const fs = require('fs-extra');
+const url = require('url');
 const chalk = require('react-dev-utils/chalk');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
@@ -31,9 +32,15 @@ const openBrowser = require('react-dev-utils/openBrowser');
 const paths = require('../config/paths');
 const configFactory = require('../config/webpack.config');
 const createDevServerConfig = require('../config/webpackDevServer.config');
+const {
+  copyPublicFolder,
+  createHostedHtml,
+  replaceAppInfoVersionForDev,
+} = require('./utils');
 
 const useYarn = fs.existsSync(paths.yarnLockFile);
 const isInteractive = process.stdout.isTTY;
+const useWebOS = process.argv.indexOf('--no-webos') === -1
 
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
@@ -75,12 +82,27 @@ checkBrowsers(paths.appPath, isInteractive)
       // We have not found a port.
       return;
     }
-    const config = configFactory('development');
+
     const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
+    const urls = prepareUrls(protocol, HOST, port);
+  
+    if (useWebOS) {
+      if (!urls.lanUrlForConfig) {
+        console.log();
+        console.log(chalk.cyan(chalk.bold('There is no a LAN IP address to host the app')));
+        console.log(`Check your connection or use ${chalk.bold('--no-webos')} param`
+          + ' to don\'t build for WebOS');
+        console.log();
+        process.exit(1);
+      }
+
+      process.env.REACT_APP_DEVTOOLS_HOST = urls.lanUrlForConfig;
+    }
+
+    const config = configFactory('development', useWebOS);
     const appName = require(paths.appPackageJson).name;
     const useTypeScript = fs.existsSync(paths.appTsConfig);
     const tscCompileOnError = process.env.TSC_COMPILE_ON_ERROR === 'true';
-    const urls = prepareUrls(protocol, HOST, port);
     const devSocket = {
       warnings: warnings =>
         devServer.sockWrite(devServer.sockets, 'warnings', warnings),
@@ -129,7 +151,22 @@ checkBrowsers(paths.appPath, isInteractive)
       }
 
       console.log(chalk.cyan('Starting the development server...\n'));
-      openBrowser(urls.localUrlForBrowser);
+
+      if (useWebOS) {
+        const appLocation = url.format({
+          protocol,
+          hostname: urls.lanUrlForConfig,
+          port,
+          pathname: '/',
+        });
+
+        fs.emptyDirSync(paths.hostedPath);
+        copyPublicFolder(paths.hostedPath);
+        createHostedHtml(appLocation);
+        replaceAppInfoVersionForDev();
+      } else {
+        openBrowser(urls.localUrlForBrowser);
+      }
     });
 
     ['SIGINT', 'SIGTERM'].forEach(function(sig) {

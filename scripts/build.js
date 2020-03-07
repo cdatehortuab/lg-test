@@ -26,6 +26,7 @@ const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const printHostingInstructions = require('react-dev-utils/printHostingInstructions');
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
 const printBuildError = require('react-dev-utils/printBuildError');
+const { copyPublicFolder } = require('./utils');
 
 const measureFileSizesBeforeBuild =
   FileSizeReporter.measureFileSizesBeforeBuild;
@@ -60,7 +61,7 @@ checkBrowsers(paths.appPath, isInteractive)
     // if you're in it, you don't end up in Trash
     fs.emptyDirSync(paths.appBuild);
     // Merge with the public folder
-    copyPublicFolder();
+    copyPublicFolder(paths.appBuild);
     // Start the webpack build
     return build(previousFileSizes);
   })
@@ -200,12 +201,5 @@ function build(previousFileSizes) {
         warnings: messages.warnings,
       });
     });
-  });
-}
-
-function copyPublicFolder() {
-  fs.copySync(paths.appPublic, paths.appBuild, {
-    dereference: true,
-    filter: file => file !== paths.appHtml,
   });
 }
