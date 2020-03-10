@@ -5,6 +5,7 @@
   "homepage": "./",
   "dependencies": {
     "react": "^16.12.0",
+    "react-app-polyfill": "^1.0.6",
     "react-dom": "^16.12.0"
   },
   "scripts": {
@@ -16,24 +17,20 @@
     "devtools": "yarn react-devtools",
     "dev-package": "ares-package hosted -o bundle",
     "dev-install": "ares-install bundle/me.cdatehortuab.lg-app_0.0.0_all.ipk",
-    "chrome-debug": "ares-novacom -f -p 9998:9222",
+    "inspect": "ares-inspect me.cdatehortuab.lg-app",
+    "debug": "ares-novacom -f -p 9998:9222",
     "launch": "ares-launch me.cdatehortuab.lg-app"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    "last 1 chrome version",
+    "Chrome 68",
+    "Chrome 53",
+    "Chrome 38",
+    "Chrome 27"
+  ],
   "jest": {
     "roots": [
       "<rootDir>/src"
@@ -82,11 +79,6 @@
     "watchPlugins": [
       "jest-watch-typeahead/filename",
       "jest-watch-typeahead/testname"
-    ]
-  },
-  "babel": {
-    "presets": [
-      "react-app"
     ]
   },
   "devDependencies": {
