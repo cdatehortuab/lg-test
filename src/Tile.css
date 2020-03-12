@@ -14,7 +14,7 @@
   background-color: pink;
 }
 
-.Tile:focus, .Tile:hover {
+.Tile:focus, .Tile:hover, .Tile.focused {
   transform: scale(1.03);
   border-color: darkcyan;
   border-style: solid;

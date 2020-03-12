@@ -1,8 +1,10 @@
 import React, { useCallback, useMemo } from 'react';
+import { withFocusable } from '@noriginmedia/react-spatial-navigation';
 
 import './Tile.css';
+import { useOnEnterKeyDown } from './KeyEventsHandler';
 
-function Tile({ id, isSelected, className, onSelect, children }) {
+export function Tile({ id, isSelected, className, onSelect, focused, children }) {
   const onClick = useCallback(
     () => {
       console.log('Me han hecho click', id);
@@ -11,13 +13,16 @@ function Tile({ id, isSelected, className, onSelect, children }) {
     [id, onSelect],
   );
 
+  useOnEnterKeyDown(onClick, focused);
+
   const classNameString = useMemo(() => (
     [
       'Tile',
       isSelected && 'selected',
+      focused && 'focused',
       className,
     ].filter(Boolean).join(' ')
-  ), [isSelected, className])
+  ), [isSelected, className, focused])
 
   return (
     <button className={classNameString} onClick={onClick}>
@@ -26,4 +31,4 @@ function Tile({ id, isSelected, className, onSelect, children }) {
   )
 }
 
-export default Tile;
+export const FocusableTile = withFocusable()(Tile);
