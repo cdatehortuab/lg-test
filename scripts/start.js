@@ -40,7 +40,7 @@ const {
 
 const useYarn = fs.existsSync(paths.yarnLockFile);
 const isInteractive = process.stdout.isTTY;
-const useWebOS = process.argv.indexOf('--no-webos') === -1
+const useWebOS = process.argv.indexOf('--no-webos') === -1;
 
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {

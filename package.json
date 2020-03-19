@@ -13,14 +13,14 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "package": "ares-package build -o bundle -e precache-manifest.*.js -e service-worker.js -e *.map",
+    "package": "node scripts/ares.js package build -o bundle -e precache-manifest.*.js -e service-worker.js -e *.map",
     "bundle": "yarn build && yarn package",
     "devtools": "yarn react-devtools",
-    "dev-package": "ares-package hosted -o bundle",
-    "dev-install": "ares-install bundle/me.cdatehortuab.lg-app_0.0.0_all.ipk",
-    "inspect": "ares-inspect me.cdatehortuab.lg-app",
-    "debug": "ares-novacom -f -p 9998:9222",
-    "launch": "ares-launch me.cdatehortuab.lg-app"
+    "dev-package": "node scripts/ares.js package hosted -o bundle",
+    "dev-install": "node scripts/ares.js install bundle/me.cdatehortuab.lg-app_0.0.0_all.ipk",
+    "inspect": "node scripts/ares.js inspect me.cdatehortuab.lg-app",
+    "debug": "node scripts/ares.js novacom -f -p 9998:9222",
+    "launch": "node scripts/ares.js launch me.cdatehortuab.lg-app"
   },
   "eslintConfig": {
     "extends": "react-app"
